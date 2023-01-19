@@ -10,5 +10,6 @@ namespace CRMUpSchool.DataAccessLayer.Abstract
     public interface IEmployeeTaskDal: IGenericDal<EmployeeTask>
     {
         List<EmployeeTask> GetEmployeeTasksByEmployee();
+        List<EmployeeTask> GetEmployeeTaskById(int id);
     }
 }

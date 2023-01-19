@@ -230,6 +230,62 @@ namespace CRMUpSchool.DataAccessLayer.Migrations
                     b.ToTable("EmployeeTasks");
                 });
 
+            modelBuilder.Entity("CRMUpSchool.EntityLayer.Concrete.EmployeeTaskDetail", b =>
+                {
+                    b.Property<int>("EmployeeTaskDetailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EmployeeTaskID")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeeTaskDetailID");
+
+                    b.HasIndex("EmployeeTaskID");
+
+                    b.ToTable("EmployeeTaskDetails");
+                });
+
+            modelBuilder.Entity("CRMUpSchool.EntityLayer.Concrete.Message", b =>
+                {
+                    b.Property<int>("MessageID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MessageContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageSubject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecieverEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecieverName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MessageID");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -353,6 +409,17 @@ namespace CRMUpSchool.DataAccessLayer.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("CRMUpSchool.EntityLayer.Concrete.EmployeeTaskDetail", b =>
+                {
+                    b.HasOne("CRMUpSchool.EntityLayer.Concrete.EmployeeTask", "EmployeeTask")
+                        .WithMany("EmployeeTaskDetails")
+                        .HasForeignKey("EmployeeTaskID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmployeeTask");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("CRMUpSchool.EntityLayer.Concrete.AppRole", null)
@@ -412,6 +479,11 @@ namespace CRMUpSchool.DataAccessLayer.Migrations
             modelBuilder.Entity("CRMUpSchool.EntityLayer.Concrete.Category", b =>
                 {
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("CRMUpSchool.EntityLayer.Concrete.EmployeeTask", b =>
+                {
+                    b.Navigation("EmployeeTaskDetails");
                 });
 #pragma warning restore 612, 618
         }

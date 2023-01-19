@@ -13,6 +13,15 @@ namespace CRMUpSchool.DataAccessLayer.EnttyFramework
 {
     public class EFEmployeeTaskDal : GenericRepository<EmployeeTask>, IEmployeeTaskDal
     {
+        public List<EmployeeTask> GetEmployeeTaskById(int id)
+        {
+            using (var context = new Context())
+            {
+                var values = context.EmployeeTasks.Where(x => x.AppUserID == id).ToList();
+                return values;
+            }
+        }
+
         public List<EmployeeTask> GetEmployeeTasksByEmployee()
         {
             using(var context = new Context())

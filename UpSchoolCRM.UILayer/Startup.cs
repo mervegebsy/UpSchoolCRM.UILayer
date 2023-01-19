@@ -4,9 +4,11 @@ using CRMUpSchool.DataAccessLayer.Abstract;
 using CRMUpSchool.DataAccessLayer.Concrete;
 using CRMUpSchool.DataAccessLayer.EnttyFramework;
 using CRMUpSchool.EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,11 +41,31 @@ namespace UpSchoolCRM.UILayer
             services.AddScoped<IEmployeeTaskService, EmployeeTaskManager>();
             services.AddScoped<IEmployeeTaskDal, EFEmployeeTaskDal>();
 
+            services.AddScoped<IEmployeeTaskDetailService, EmployeeTaskDetailManager>();
+            services.AddScoped<IEmployeeTaskDetailDal, EFEmployeeTaskDetail>();
+
+            services.AddScoped<IMessageService, MessageManager>();
+            services.AddScoped<IMessageDal, EFMessageDal>();
+
             services.AddDbContext<Context>();
             services.AddIdentity<AppUser, AppRole>().AddErrorDescriber<CustomIdentityValidator>().AddEntityFrameworkStores<Context>(); 
            
             services.AddControllersWithViews();
+
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                            .RequireAuthenticatedUser()
+                            .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Login/Index";
+
+            });
         }
+       
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
